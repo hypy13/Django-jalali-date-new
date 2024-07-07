@@ -24,7 +24,7 @@ class JalaliDateField(DateField):
 class JalaliDateTimeField(DateTimeField):
     def prepare_value(self, value):
         if isinstance(value, datetime_datetime):
-            return datetime2jalali(value).strftime('%Y-%m-%d %H:%M:%S')
+            return datetime2jalali(value).strftime('%Y-%m-%d %H:%M')
         return value
 
     def strptime(self, value, format):
