@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db.models import DateTimeField, DateField
 from jalali_date_new.fields import JalaliDateTimeField, JalaliDateField
-from jalali_date_new.utils import datetime2jalali
+from jalali_date_new.utils import datetime2jalali, to_georgian
 from jalali_date_new.widgets import AdminJalaliDateTimeWidget, AdminJalaliDateWidget
 
 
@@ -16,9 +16,18 @@ class JalaliDateTimeModelField(DateTimeField):
         )
 
     def from_db_value(self, value, expression, connection):
-        return datetime2jalali(value).strftime(
-            getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d %H:%M:%S")
-        )
+        if value:
+            value = datetime2jalali(value).strftime(
+                getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d %H:%M:%S")
+            )
+        return value
+
+    def pre_save(self, model_instance, add):
+        if val := getattr(model_instance, self.attname, None):
+            if isinstance(val, str):
+                return to_georgian(val, getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d %H:%M:%S"))
+
+        return super().pre_save(model_instance, add)
 
 
 class JalaliDateModelField(DateField):
@@ -32,6 +41,15 @@ class JalaliDateModelField(DateField):
         )
 
     def from_db_value(self, value, expression, connection):
-        return datetime2jalali(value).strftime(
-            getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d")
-        )
+        if value:
+            value = datetime2jalali(value).strftime(
+                getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d")
+            )
+        return value
+
+    def pre_save(self, model_instance, add):
+        if val := getattr(model_instance, self.attname, None):
+            if isinstance(val, str):
+                return to_georgian(val, getattr(settings, 'JDATE_FORMAT', "%Y-%m-%d"))
+
+        return super().pre_save(model_instance, add)
