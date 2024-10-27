@@ -2,7 +2,7 @@ window.onload = function () {
     jalaliDatepicker.startWatch(
         {
             separatorChars: {
-                date: "-"
+                date: "/"
             },
             time: true,
             zIndex: 999999999,
