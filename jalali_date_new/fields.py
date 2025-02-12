@@ -26,6 +26,17 @@ class JalaliDateField(DateField):
     def strptime(self, value, format):
         return jalali_datetime.strptime(force_str(value), format).togregorian().date()
 
+    def clean(self, value: Any) -> Any:
+
+        # if self.required and not value:
+        #     raise ValidationError('Feild is Required')
+
+        if not value:
+            return None
+
+        val = to_georgian(value, with_tz=True)
+        return val
+
 
 class JalaliDateTimeField(DateTimeField):
     def prepare_value(self, value):
