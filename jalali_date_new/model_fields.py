@@ -7,9 +7,9 @@ class JalaliDateTimeModelField(DateTimeField):
     def formfield(self, **kwargs):
         return super().formfield(
             **{
+                **kwargs,
                 'form_class': JalaliDateTimeField,
                 "widget": AdminJalaliDateTimeWidget,
-                **kwargs,
             }
         )
 
@@ -18,8 +18,8 @@ class JalaliDateModelField(DateField):
     def formfield(self, **kwargs):
         return super().formfield(
             **{
+                **kwargs,
                 'form_class': JalaliDateField,
                 "widget": AdminJalaliDateWidget,
-                **kwargs,
             }
         )
